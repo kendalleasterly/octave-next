@@ -1,27 +1,111 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+  .icon {
+    @apply w-6 h-6 md:w-5 md:h-5;
+  }
+  .medium-only {
+    @apply hidden md:block;
+  }
+
+  .text {
+    @apply text-gray-700 font-medium dark:text-white
+  }
+  button {
+    @apply focus:outline-none
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@media (max-width: 768px) {
+  #player-artist {
+    display: none;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.collection-top {
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+}
+
+@media (max-width: 640px) {
+  .collection-top {
+    display: flex;
+  }
+}
+
+.two-lines {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.one-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.menu {
+  max-height: 100vh;
+  max-height: calc(100vh - 5.75rem);
+}
+
+@media (max-width: 640px) {
+  .menu {
+    max-height: 100vh;
+    max-height: calc(100vh - 4.25rem - 1.5rem);
+  }
+}
+
+.thumbnail {
+  width: 3rem;
+  height: 3rem
+}
+
+@media(min-width: 768px) {
+  .thumbnail {
+    width: 2.75rem;
+    height: 2.75rem
+  }
+}
+
+.h-fullscreen {
+  height: calc(100vh - 4.1875rem);
+}
+
+@media (min-width: 768px) {
+  .h-fullscreen {
+    height: calc(100vh - 5.75rem);
+  }
+}
+
+#player-thumbnail {
+  width: 56px;
+  height: 56px;
+}
+
+@media (max-width: 768px) {
+  .album-view-content {
+    display: block;
+  }
 }
