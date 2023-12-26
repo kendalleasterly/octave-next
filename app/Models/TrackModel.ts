@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { currentPlaybackObjectAtom, queueAtom } from "../Global/atoms";
 import { accountAtom } from "./AccountModel";
-import { PlaybackObject } from "./PlaybackModel";
+import { PlaybackObject } from "./typedefs";
 import { Track } from "./typedefs";
 
 export function useTrackModel() {
@@ -13,7 +13,7 @@ export function useTrackModel() {
 	// const serverURL = "http://localhost:4000"
 
 
-	function getPlaybackObjectFromTrack(rawTrack, index, guid) {
+	function getPlaybackObjectFromTrack(rawTrack: Track): Promise<PlaybackObject> {
 
 		const track = JSON.parse(JSON.stringify(rawTrack))
 		delete track.dateAdded
@@ -24,7 +24,7 @@ export function useTrackModel() {
 
 			const SSTrack = sessionStorage.getItem(track.id);
 
-			function fetchNewDownloadURL() {
+			function fetchNewDownloadURL(): Promise<PlaybackObject> {
 
 				return new Promise((resolve, reject) => {
 					const payload = JSON.stringify(track);
@@ -42,11 +42,9 @@ export function useTrackModel() {
 							sessionStorage.setItem(track.id, JSON.stringify(response.data));
 
 							const playbackObject = new PlaybackObject(
-								track,
+								track, 
 								response.data.url,
-								response.data.expireTime,
-								index,
-								guid
+								response.data.expireTime
 							);
 
 							resolve(playbackObject);
@@ -74,8 +72,7 @@ export function useTrackModel() {
 					const playbackObject = new PlaybackObject(
 						track,
 						jsonSSTrack.url,
-						jsonSSTrack.expireTime,
-						index
+						jsonSSTrack.expireTime
 					);
 
 					resolve(playbackObject);
@@ -108,11 +105,10 @@ export function useTrackModel() {
 		});
 	}
 
-	function giveObjectsPositions(objects) {
+	function giveObjectsPositions(objects: any[]): {object: any, position: number}[] { //object could be a track or a trackID (playlist implementation)
 		let tracksWithPositions = [];
-
-		let i;
-		for (i = 0; i < objects.length; i++) {
+		
+		for (let i = 0; i < objects.length; i++) {
 			let trackWithPosition = {
 				object: objects[i],
 				position: i,
@@ -124,33 +120,37 @@ export function useTrackModel() {
 		return tracksWithPositions
 	}
 
-	function playCollection(collection) {
+	function playCollection(collection: {object: Track, position: number}[], isShuffled: boolean) {
 		return new Promise((resolve, reject) => {
 
-			let playbackObjectArray = [];
+			let playbackObjectArray: PlaybackObject[] = [];
 
 			let errors = 0;
 
-			function updatePlaybackObjectArray(playbackObject) {
+			function updatePlaybackObjectArray(playbackObject?: PlaybackObject) {
 				if (playbackObject) {
 					playbackObjectArray.push(playbackObject);
 				}
 
 				if (playbackObjectArray.length === collection.length - errors) {
-					playbackObjectArray = playbackObjectArray.sort((first, second) => {
-						return first.position - second.position;
-					});
+
+					if (!isShuffled) {
+						playbackObjectArray = playbackObjectArray.sort((first, second) => {
+							return first.position!- second.position!;
+						});
+					}
 
 					resolve(playbackObjectArray);
 				}
 			}
 
 			collection.forEach((trackWithPosition) => {
-				this.getPlaybackObjectFromTrack(
-					trackWithPosition.object,
-					trackWithPosition.position
+				getPlaybackObjectFromTrack(
+					trackWithPosition.object
 				)
 					.then((playbackObject) => {
+
+						playbackObject.position = trackWithPosition.position
 
 						if (playbackObject.position === collection[0].position) {
 							setCurrentPlaybackObject(playbackObject);
@@ -168,7 +168,7 @@ export function useTrackModel() {
 		})
 	}
 
-	function convertSecondsToReadableTime(totalSeconds) {
+	function convertSecondsToReadableTime(totalSeconds: number) {
 		if (typeof totalSeconds === "number") {
 			let minutes = totalSeconds / 60;
 			minutes = Math.floor(minutes);
@@ -185,7 +185,7 @@ export function useTrackModel() {
 		}
 	}
 
-	function addTrackToDatabase(track) {
+	function addTrackToDatabase(track: Track): Promise<void> {
 
 		let copy = JSON.parse(JSON.stringify(track))
 		delete copy.dateAdded

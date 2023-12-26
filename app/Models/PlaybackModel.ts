@@ -6,7 +6,7 @@ import {
 	shufflingAtom,
 } from "../Global/atoms";
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {Track} from "./SpotifyModel";
+import {PlaybackObject, Track} from "./typedefs";
 import {useNotificationModel, NotificationObject} from "./NotificationModel";
 import {useTrackModel} from "./TrackModel";
 
@@ -38,7 +38,7 @@ export function usePlaybackModel() {
 					currentPlaybackObject.track.duration
 				);
 
-				updateElementWithClass("time-total", (element) => {
+				updateElementWithClass("time-total", (element: HTMLElement) => {
 					element.innerHTML = readableTime;
 				});
 
@@ -80,7 +80,7 @@ export function usePlaybackModel() {
 			Math.floor(timeProgressed)
 		);
 
-		updateElementWithClass("time-progressed", (element) => {
+		updateElementWithClass("time-progressed", (element: HTMLElement) => {
 			element.innerHTML = readableTime;
 		});
 	}
@@ -115,14 +115,13 @@ export function usePlaybackModel() {
 
 	function skip() {
 		if (currentPlaybackObject.track) {
-			let currentQueuePosition = getCurrentQueuePosition();
-
+			
 			const nextSongIndex = getCurrentQueuePosition() + 1;
-			console.log({currentQueuePosition, nextSongIndex});
 
-			const nextPlaybackObject = queue[nextSongIndex];
+			if (queue.length < nextSongIndex) {
 
-			if (nextPlaybackObject) {
+				const nextPlaybackObject = queue[nextSongIndex];
+
 				checkAndSetCurrentPlaybackObject(nextPlaybackObject);
 			} else {
 				goToFirstSong();
@@ -138,7 +137,7 @@ export function usePlaybackModel() {
 		player.currentTime = 0;
 	}
 
-	function addToQueue(track) {
+	function addToQueue(track: Track) {
 		notificationModel.add(
 			new NotificationObject(`Adding "${track.title}" to queue...`)
 		);
@@ -147,7 +146,7 @@ export function usePlaybackModel() {
 			.getPlaybackObjectFromTrack(track) //has no position
 			.then((playbackObject) => {
 				let newQueue = [...queue];
-				newQueue.splice(getCurrentQueuePosition() + 1, 0, playbackObject);
+				newQueue.splice(getCurrentQueuePosition() + 1, 0, playbackObject); //TODO set new playbackobject positoion
 
 				setQueue(newQueue);
 				console.log({newQueue});
@@ -156,8 +155,7 @@ export function usePlaybackModel() {
 					new NotificationObject(
 						`"${track.title}" added to queue`,
 						"This song will play next",
-						"collection success",
-						true
+						"collection success"
 					)
 				);
 			})
@@ -185,7 +183,7 @@ export function usePlaybackModel() {
 			let sortedQueue = [...queue];
 
 			sortedQueue.sort((firstPlaybackObject, secondPlaybackObject) => {
-				return firstPlaybackObject.position - secondPlaybackObject.position;
+				return firstPlaybackObject.position! - secondPlaybackObject.position!;
 			});
 
 			console.log({sortedQueue})
@@ -229,7 +227,7 @@ export function usePlaybackModel() {
 
 	//MARK: Misc
 
-	function getPositionInQueue(playbackObject) {
+	function getPositionInQueue(playbackObject: PlaybackObject) {
 		let i;
 		for (i = 0; i < queue.length; i++) {
 			let loopPlaybackOjbect = queue[i];
@@ -242,13 +240,13 @@ export function usePlaybackModel() {
 		return -1;
 	}
 
-	function checkAndSetCurrentPlaybackObject(playbackObject) {
+	function checkAndSetCurrentPlaybackObject(playbackObject: PlaybackObject) {
 
 		if (playbackObject.isExpired) {
 
 			prepareForNewSong()
 
-			playTrack(playbackObject.track, playbackObject.position, playbackObject.guid)
+			playTrack(playbackObject.track!, playbackObject.position, playbackObject.guid)
 			.then(newPlaybackObject => {
 				//update the queue to reflect the change
 
@@ -269,20 +267,24 @@ export function usePlaybackModel() {
 		}
 	}
 
-	function getCurrentQueuePosition() {
-		let i;
-		for (i = 0; i < queue.length; i++) {
+	function getCurrentQueuePosition(): number {
+		for (let i = 0; i < queue.length; i++) {
 			const playbackObject = queue[i];
 
 			if (playbackObject.guid === currentPlaybackObject.guid) {
 				return i;
 			}
 		}
+
+		console.error("couldn't find the current playback object")
+		return queue.length - 1
+
+
 	}
 
-	function prepareForNewSong(shouldEmptyQueue) {
+	function prepareForNewSong(shouldEmptyQueue: boolean = false) {
 		console.log("prepare for new song and was set to true");
-		document.tilte = "Octave";
+		document.title = "Octave"; //FIXME i'm pretty sure next.js has like a custom metadata thing you can do instead
 
 		if (shouldEmptyQueue === true) {
 			setQueue([]);
@@ -300,12 +302,14 @@ export function usePlaybackModel() {
 					"",
 					"",
 					"",
+					"",
+					"",
+					placeholder.getPlaceholder(),
 					0,
 					"",
-					"",
-					placeholder.getPlaceholder()
-				),
-				""
+					[]
+					
+				)
 			)
 		);
 	}
@@ -324,7 +328,7 @@ export function usePlaybackModel() {
 
 	//MARK: Helper functions
 
-	function updateElementWithClass(className, updaterFunction) {
+	function updateElementWithClass(className:string, updaterFunction: (arg0:any) => (any)) {
 		const elements = document.getElementsByClassName(className);
 
 		for (let i = 0; i < elements.length; i++) {
@@ -332,12 +336,12 @@ export function usePlaybackModel() {
 		}
 	}
 
-	function playTrack(track, position, guid) {
+	function playTrack(track: Track, position?: number, guid?: string): Promise<PlaybackObject> {
 
 		return new Promise((resolve, reject) =>  {
 
-			if (currentPlaybackObject.track) {
-				if (currentPlaybackObject.track.id !== track.id) {
+			if (currentPlaybackObject) {
+				if (currentPlaybackObject?.track?.id !== track.id) {
 					prepareForNewSong();
 				}
 			} else {
@@ -345,14 +349,17 @@ export function usePlaybackModel() {
 			}
 
 			trackModel
-				.getPlaybackObjectFromTrack(track, position, guid)
+				.getPlaybackObjectFromTrack(track)
 				.then((playbackObject) => {
-					if (currentPlaybackObject.track) {
-						if (currentPlaybackObject.track.id === playbackObject.track.id) {
-							setShouldPlay(false);
-							player.currentTime = 0;
-						}
+					
+					if (currentPlaybackObject.track?.id === playbackObject.track?.id) {
+						setShouldPlay(false);
+						player.currentTime = 0;
 					}
+					 //TODO check if this is what you acutally wnant
+
+					if (position) {playbackObject.position = position}
+					if (guid) {playbackObject.guid = guid}
 
 					setCurrentPlaybackObject(playbackObject);
 
@@ -375,11 +382,9 @@ export function usePlaybackModel() {
 					reject("error playing song: " + err);
 				});
 		})
-
-		
 	}
 
-	function shuffleObjects(unshuffledObjects) {
+	function shuffleObjects(unshuffledObjects: any[]): any[] {
 		let shuffledObjects = [...unshuffledObjects];
 
 		let lastIndex = shuffledObjects.length - 1;
@@ -416,27 +421,5 @@ export function usePlaybackModel() {
 		getPositionInQueue,
 	};
 }
-
-function generateGUID() {
-	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-		var r = (Math.random() * 16) | 0,
-			v = c == "x" ? r : (r & 0x3) | 0x8;
-		return v.toString(16);
-	});
-}
-
 //TODO: make sure that when a playbackObject expires and it is given a new one, it has the same guid.
 //	you can test this by seeing if it shows up as it's position in timelineView
-
-export class PlaybackObject {
-	constructor(track, url, expireTime, position, guid) {
-		this.track = track;
-		this.url = url;
-		this.expireTime = expireTime;
-		this.position = position || 0
-		this.isExpired = Date.now() >= this.expireTime;
-		this.guid = guid || generateGUID()
-	}
-
-	//add a function that caluculates wheter or not the song will expire by the end of playback
-}

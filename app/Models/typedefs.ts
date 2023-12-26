@@ -37,15 +37,15 @@ export type SpotifyTrack = SimplifiedSpotifyTrack & {
 export class Track {
     constructor(
         public title: string,
-        public aritst: string,
+        public artist: string,
         public album: string,
         public track: string,
-        public date: string,
-        public id: string,
+        public date: string ,
+        public id: string ,
         public artwork: string,
         public thumbnail: string,
         public  duration: number,
-        public albumId: string,
+        public albumID: string,
         public artistObjects: SpotifyArtist[]) {}
 	
 }
@@ -57,13 +57,13 @@ export class PlaylistTrack extends Track {
         public title: string,
     public artist: string,
     public album: string,
-    public  track: string,
+    public track: string, // "3/20" 3rd out of 20
     public date: string,
     public id: string,
     public artwork: string,
     public thumbnail: string,
     public duration: number,
-    public albumId: string,
+    public albumID: string,
     public artistObjects: SpotifyArtist[],
     public dateAdded: Date) {
         super(title,
@@ -71,7 +71,7 @@ export class PlaylistTrack extends Track {
             album,
             track,
             date,
-            id, artwork, thumbnail, duration, albumId, artistObjects)
+            id, artwork, thumbnail, duration, albumID, artistObjects)
     }
 	
 }
@@ -104,3 +104,37 @@ export class FullAlbum extends Album {
 	
 }
 
+export type SimplePlaylist = {id: string, title: string}
+
+export class PlaybackObject {
+
+	isExpired: boolean
+
+	constructor(
+		public track?: Track, 
+		public url?: string, 
+		public expireTime?: number, 
+		public position?: number, 
+		public guid?: string) {
+
+        if (this.expireTime) {
+            this.isExpired = Date.now() >= this.expireTime;
+        } else {
+            this.isExpired = true
+        }
+
+		if (!this.guid) {
+			this.guid = this.generateGUID()
+		}
+	}
+
+    generateGUID() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+            var r = (Math.random() * 16) | 0,
+                v = c == "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+        });
+    }
+
+	//add a function that caluculates wheter or not the song will expire by the end of playback
+}

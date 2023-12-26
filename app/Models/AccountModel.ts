@@ -5,10 +5,8 @@ import { NotificationObject, useNotificationModel } from "./NotificationModel"
 import { useTrackModel } from "./TrackModel"
 import { GoogleAuthProvider, getRedirectResult, signInWithRedirect } from "firebase/auth"
 import { Timestamp, collection, deleteField, doc, getDoc, onSnapshot, query, serverTimestamp, setDoc, updateDoc } from "firebase/firestore"
-import { Track } from "./typedefs"
+import { SimplePlaylist, Track } from "./typedefs"
 import { update } from "firebase/database"
-
-type SimplePlaylist = {id: string, title: string}
 
 type SavedTracks = {[key: string]: {id:string, dateAdded: Date}}
 

@@ -3,8 +3,8 @@ import { db } from "../Global/firebase"
 import { accountAtom } from "./AccountModel"
 import { NotificationObject, useNotificationModel } from "./NotificationModel"
 import { useSpotifyModel } from "./SpotifyModel"
-import { useTrackModel } from "./TrackModel"
-import { PlaylistTrack, Track } from "./typedefs"
+import { useTrackModel } from "../Models/TrackModel"
+import { PlaylistTrack, SimplePlaylist, Track } from "../Models/typedefs"
 import { Timestamp, addDoc, arrayRemove, arrayUnion, collection, deleteField, doc, getDoc, runTransaction, serverTimestamp, writeBatch } from "firebase/firestore"
 
 export class Playlist {
@@ -154,7 +154,7 @@ export function usePlaylistModel() {
 			})
 	}
 
-	function addToPlaylist(rawTrack: Track, playlist: Playlist) {
+	function addToPlaylist(rawTrack: Track, playlist: SimplePlaylist) {
 		const track = JSON.parse(JSON.stringify(rawTrack))
 		delete track.dateAdded
 
@@ -201,7 +201,7 @@ export function usePlaylistModel() {
 					)
 				)
 
-				trackModel.addTrackToDatabase(track).catch((error) => {
+				trackModel.addTrackToDatabase(track).catch((error:any) => {
 					if (error.response) {
 						if (error.response.status !== 409) {
 							console.log("error adding song file to database", error)

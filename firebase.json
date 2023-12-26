@@ -8,6 +8,14 @@
     ],
     "frameworksBackend": {
       "region": "us-central1"
-    }
+    },
+    "rewrites": [
+      {
+        "source": "/api",
+        "function": {
+          "functionId": "api"
+        }
+      }
+    ]
   }
 }
