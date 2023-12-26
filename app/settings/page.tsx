@@ -43,8 +43,6 @@ function Settings() {
 					Dark Mode: {isDark ? "on" : "off"}
 				</button>
 
-				<p className='text'>hello world</p>
-
 			</div>
 		);
 }

@@ -128,15 +128,18 @@ function Player() {
 							: "#"
 					}`}
 					className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
+
+					{ currentPlaybackObject.track && currentPlaybackObject.track.thumbnail != ""? 
 					<Image
-						src={
-							currentPlaybackObject.track
-								? currentPlaybackObject.track.thumbnail
-								: placeholder.getPlaceholder(true)
-						}
+						src={currentPlaybackObject.track.thumbnail}
 						className="rounded-md"
 						alt=""
-					/>
+					/> 
+					: 
+					placeholder.getPlaceholder()
+					}
+
+					
 				</Link>
 
 				<div className="space-y-1.5 my-auto">

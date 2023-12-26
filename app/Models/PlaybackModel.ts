@@ -305,7 +305,7 @@ export function usePlaybackModel() {
 					"",
 					"",
 					"",
-					placeholder.getPlaceholder(),
+					"",
 					0,
 					"",
 					[]
