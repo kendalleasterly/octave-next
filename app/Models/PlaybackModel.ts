@@ -12,6 +12,7 @@ import {useTrackModel} from "./TrackModel";
 
 import {useState} from "react";
 import {usePlaceholder} from "../Components/Placeholder";
+import { useReferences } from "../Global/references";
 
 export function usePlaybackModel() {
 	const [queue, setQueue] = useRecoilState(queueAtom);
@@ -25,7 +26,7 @@ export function usePlaybackModel() {
 	const placeholder = usePlaceholder();
 
 	const [currentPlaybackObject, setCurrentPlaybackObject] = useRecoilState(currentPlaybackObjectAtom);
-	const player:HTMLAudioElement = document.getElementById("custom-player") as HTMLAudioElement
+	const player: {current: HTMLAudioElement | null} = useReferences().audioReference!
 
 	//MARK: Event listeners
 
@@ -48,7 +49,7 @@ export function usePlaybackModel() {
 					currentPlaybackObject.track.artist;
 				//get the current time and update it
 			} else {
-				player.pause();
+				player.current!.pause();
 				setShouldPlay(true);
 			}
 		}
@@ -75,7 +76,7 @@ export function usePlaybackModel() {
 	}
 
 	function handleUpdate() {
-		const timeProgressed = player.currentTime;
+		const timeProgressed = player.current!.currentTime;
 		const readableTime = trackModel.convertSecondsToReadableTime(
 			Math.floor(timeProgressed)
 		);
@@ -88,17 +89,17 @@ export function usePlaybackModel() {
 	//MARK: Playback Functions
 
 	function playPause() {
-		if (player.paused) {
-			player.play();
+		if (player.current!.paused) {
+			player.current!.play();
 		} else {
-			player.pause();
+			player.current!.pause();
 		}
 	}
 
 	function skipBack() {
 		if (currentPlaybackObject.track) {
-			if (player.currentTime > 3) {
-				player.currentTime = 0;
+			if (player.current!.currentTime > 3) {
+				player.current!.currentTime = 0;
 			} else {
 				const previousSongIndex = getCurrentQueuePosition() - 1;
 
@@ -107,7 +108,7 @@ export function usePlaybackModel() {
 				if (previousPlaybackObject) {
 					checkAndSetCurrentPlaybackObject(previousPlaybackObject);
 				} else {
-					player.currentTime = 0;
+					player.current!.currentTime = 0;
 				}
 			}
 		}
@@ -134,7 +135,7 @@ export function usePlaybackModel() {
 		setShouldPlay(false);
 		console.log("go to first song ran and should play set to false");
 		checkAndSetCurrentPlaybackObject(queue[0]);
-		player.currentTime = 0;
+		player.current!.currentTime = 0;
 	}
 
 	function addToQueue(track: Track) {
@@ -290,7 +291,7 @@ export function usePlaybackModel() {
 			setQueue([]);
 		}
 		
-		player.pause();
+		player.current!.pause();
 
 		setShouldPlay(true);
 
@@ -354,7 +355,7 @@ export function usePlaybackModel() {
 					
 					if (currentPlaybackObject.track?.id === playbackObject.track?.id) {
 						setShouldPlay(false);
-						player.currentTime = 0;
+						player.current!.currentTime = 0;
 					}
 					 //TODO check if this is what you acutally wnant
 

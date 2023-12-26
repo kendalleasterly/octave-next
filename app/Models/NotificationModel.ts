@@ -1,3 +1,5 @@
+"use client"
+
 import {atom, useRecoilState} from "recoil"
 
 export class NotificationObject {
@@ -30,3 +32,4 @@ export function useNotificationModel() {
 
 
 
+// module.exports = {NotificationObject}

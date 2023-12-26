@@ -13,7 +13,7 @@ import { usePlaylistModel } from "../Models/PlaylistModel"
 import { accountAtom, useAccountModel } from "../Models/AccountModel"
 import { usePlaybackModel } from "../Models/PlaybackModel"
 import { MouseEventHandler, useState } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { Track } from "../Models/typedefs"
 
 function Song({
@@ -25,8 +25,8 @@ function Song({
 }: {
 	index: number
 	track: Track
-	noImage: boolean
-	deleteFromPlaylist: () => void
+	noImage?: boolean
+	deleteFromPlaylist?: () => void
 	onClickFunction?: () => void
 }) {
 	const isDark = useRecoilValue(isDarkAtom)

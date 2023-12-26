@@ -1,3 +1,5 @@
+'use client'
+
 import { atom } from "recoil"
 import { PlaybackObject } from "../Models/typedefs"
 
@@ -54,13 +56,23 @@ export const contextSelectionAtom = atom({
     default: -1
 })
 
+
 //MARK: Settings
 
 function getLSBool(setting: string) {
 
-    const LSBool = localStorage.getItem(setting)
 
-    return LSBool === "true"
+    if (typeof window !== "undefined") {
+        const LSBool = localStorage.getItem(setting)
+
+        return LSBool === "true"
+    } else {
+        console.log("chose not to get the value")
+    }
+
+    return false
+
+    
 }
 
 export const isDarkAtom = atom({

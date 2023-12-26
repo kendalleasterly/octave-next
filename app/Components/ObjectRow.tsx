@@ -18,7 +18,7 @@ function ObjectRow({
 	noImage?: boolean
 	index: number
 	onContextMenu?: (event: any) => void
-	children: ReactNode
+	children?: ReactNode
 }) {
 	const currentPlaybackObject = useRecoilValue(currentPlaybackObjectAtom)
 	const { convertSecondsToReadableTime } = useTrackModel()

@@ -9,7 +9,7 @@ import {
 
 import TimelineIcon from "../Images/timeline.svg"
 import DevicesIcon from "../Images/devices.svg"
-import FullScreenPlayer from "../Views/FullScreenPlayer"
+import FullScreenPlayer from "./FullScreenPlayer"
 import ProgressBar from "./ProgressBar"
 import { usePlaybackModel } from "../Models/PlaybackModel"
 import SkipIcon from "../Images/skip.svg"
@@ -20,10 +20,12 @@ import ExpandIcon from "../Images/expand.svg"
 import { usePlaceholder } from "./Placeholder"
 import Link from "next/link"
 import Image from "next/image"
+import { useReferences } from "../Global/references"
 
 function Player() {
 	const currentPlaybackObject = useRecoilValue(currentPlaybackObjectAtom)
 	const isPlaying = useRecoilValue(isPlayingAtom)
+	const audioReference = useReferences().audioReference //TODO make sure that whole ref thing works prob doesn't
 
 	const {
 		handlePlaying,
@@ -51,7 +53,8 @@ function Player() {
 				onPlaying={handlePlaying}
 				onPause={handlePause}
 				onEnded={handleEnded}
-				onTimeUpdate={handleUpdate}></audio>
+				onTimeUpdate={handleUpdate}
+				ref = {audioReference}></audio>
 
 			{!isFullScreen ? (
 				<div>
@@ -129,7 +132,7 @@ function Player() {
 						src={
 							currentPlaybackObject.track
 								? currentPlaybackObject.track.thumbnail
-								: placeholder.getPlaceholder()
+								: placeholder.getPlaceholder(true)
 						}
 						className="rounded-md"
 						alt=""

@@ -168,7 +168,7 @@ export function useSpotifyModel() {
 		);
 	}
 
-	function fetchSearchResults(token: string, term: string, tracksOnly: boolean): Promise<(Track | Album)[]> {
+	function fetchSearchResults(token: string, term: string, tracksOnly?: boolean): Promise<(Track | Album)[]> {
 		return new Promise((resolve, reject) => {
 			const encodedTerm = encodeURIComponent(term);
 

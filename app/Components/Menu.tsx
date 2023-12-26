@@ -1,4 +1,4 @@
-import { useRouter } from "next/router"
+import { usePathname, useRouter } from "next/navigation"
 
 import SearchIcon from "../Images/search.svg"
 import HomeIcon from "../Images/home.svg"
@@ -21,7 +21,7 @@ import Link from "next/link"
 import { ReactNode } from "react"
 
 function Menu() {
-	const { pathname } = useRouter()
+	const pathname = usePathname()
 	const isDark = useRecoilValue(isDarkAtom)
 	const page = pathname.replace("/", "")
 	const account = useRecoilValue(accountAtom)
@@ -30,9 +30,8 @@ function Menu() {
 	const accountModel = useAccountModel()
 
 	function getBarColor(slug: string, isSVG: boolean, canInclude?: boolean): string {
-		
 
-		if (canInclude) {
+		if (canInclude == true) {
 			if (page.toLowerCase().includes(slug.toLowerCase().replace("/", ""))) {
 				return isSVG ? "#F08A79" : "text-accent75";
 			}
@@ -42,7 +41,7 @@ function Menu() {
 			}
 		}
 
-		return isSVG ? (isDark ? "#FFFFFF" : "#3F3F46") : "text";
+		return isSVG == true ? (isDark ? "#FFFFFF" : "#3F3F46") : "text";
 
 		
 	}
@@ -173,7 +172,7 @@ function Menu() {
 
 				<button className="flex space-x-3" onClick={accountModel.signIn}>
 					<div className="my-auto">
-						<UserCircleIcon fill={isDark ? "#FFFFFF" : "#3F3F46"} />
+						<UserCircleIcon fill={(isDark ? "#FFFFFF" : "#3F3F46")} />
 					</div>
 
 					<p className="text one-line text-left">Sign In</p>

@@ -3,7 +3,7 @@ import ObjectRow from "./ObjectRow"
 import Disclosure from "../Images/disclosure.svg"
 import { useRecoilValue } from "recoil"
 import { isDarkAtom } from "../Global/atoms"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 function AlbumComponent({album, index}: {album: Album, index: number}) {
 	//TODO: when adding a song to the global queue, make sure you increase the playbackObject.positon by the queue length

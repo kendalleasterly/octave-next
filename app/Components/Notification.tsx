@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from "react"
 import { animated, useTransition } from "@react-spring/web"
 import { useRecoilState } from "recoil"
@@ -28,12 +30,14 @@ function Notification({ notificationObject }: {notificationObject: NotificationO
 		onDestroyed: () => {
 			const index = notifications.indexOf(notificationObject)
 
-			// if (index > -1) {
+			if (index > -1) {
 			let newNotifications = [...notifications]
 
 			newNotifications.splice(index, 1)
 			setNotifications(newNotifications)
-			// }
+			} else {
+				console.log("couldn't find that one",index)
+			}
 		},
 	})
 

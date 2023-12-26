@@ -27,6 +27,13 @@ module.exports = {
   
       return config
     },
+
+    nx: {
+      svgr: true
+    },
+    compiler: {
+      styledComponents: true
+    }
   
     // ...other config
   }
