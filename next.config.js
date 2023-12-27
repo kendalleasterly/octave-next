@@ -33,7 +33,15 @@ module.exports = {
     },
     compiler: {
       styledComponents: true
-    }
-  
-    // ...other config
+    },
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'i.scdn.co',
+          port: '',
+          pathname: '/**',
+        },
+      ],
+    },
   }

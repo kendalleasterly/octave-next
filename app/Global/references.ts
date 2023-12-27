@@ -1,11 +1,10 @@
-import { useRef } from "react";
+import { MutableRefObject, useRef } from "react";
 import { atom } from "recoil";
 
+let typeValue: MutableRefObject<null> | null = null
 
-export function useReferences() {
 
-    const audioReference = useRef(null)
-    const bodyReference = useRef(null)
-
-    return {audioReference, bodyReference}
-}
+export const audioRefAtom = atom({
+    key:"audioReference",
+    default: typeValue
+})

@@ -10,9 +10,9 @@ import {PlaybackObject, Track} from "./typedefs";
 import {useNotificationModel, NotificationObject} from "./NotificationModel";
 import {useTrackModel} from "./TrackModel";
 
-import {useState} from "react";
+import {MutableRefObject, useState} from "react";
 import {usePlaceholder} from "../Components/Placeholder";
-import { useReferences } from "../Global/references";
+import { audioRefAtom } from "../Global/references";
 
 export function usePlaybackModel() {
 	const [queue, setQueue] = useRecoilState(queueAtom);
@@ -23,10 +23,9 @@ export function usePlaybackModel() {
 
 	const notificationModel = useNotificationModel();
 	const trackModel = useTrackModel();
-	const placeholder = usePlaceholder();
 
 	const [currentPlaybackObject, setCurrentPlaybackObject] = useRecoilState(currentPlaybackObjectAtom);
-	const player: {current: HTMLAudioElement | null} = useReferences().audioReference!
+	const player: any | null = useRecoilValue(audioRefAtom)
 
 	//MARK: Event listeners
 
@@ -49,7 +48,7 @@ export function usePlaybackModel() {
 					currentPlaybackObject.track.artist;
 				//get the current time and update it
 			} else {
-				player.current!.pause();
+				player?.current.pause();
 				setShouldPlay(true);
 			}
 		}
@@ -76,7 +75,7 @@ export function usePlaybackModel() {
 	}
 
 	function handleUpdate() {
-		const timeProgressed = player.current!.currentTime;
+		const timeProgressed = player.current?.currentTime;
 		const readableTime = trackModel.convertSecondsToReadableTime(
 			Math.floor(timeProgressed)
 		);
@@ -89,17 +88,17 @@ export function usePlaybackModel() {
 	//MARK: Playback Functions
 
 	function playPause() {
-		if (player.current!.paused) {
-			player.current!.play();
+		if (player.current?.paused) {
+			player.current?.play();
 		} else {
-			player.current!.pause();
+			player.current?.pause();
 		}
 	}
 
 	function skipBack() {
 		if (currentPlaybackObject.track) {
-			if (player.current!.currentTime > 3) {
-				player.current!.currentTime = 0;
+			if (player.current?.currentTime && player.current?.currentTime > 3) {
+				player.current.currentTime = 0;
 			} else {
 				const previousSongIndex = getCurrentQueuePosition() - 1;
 
@@ -108,7 +107,7 @@ export function usePlaybackModel() {
 				if (previousPlaybackObject) {
 					checkAndSetCurrentPlaybackObject(previousPlaybackObject);
 				} else {
-					player.current!.currentTime = 0;
+					if (player.current.currentTime) player.current.currentTime = 0;
 				}
 			}
 		}
@@ -135,7 +134,7 @@ export function usePlaybackModel() {
 		setShouldPlay(false);
 		console.log("go to first song ran and should play set to false");
 		checkAndSetCurrentPlaybackObject(queue[0]);
-		player.current!.currentTime = 0;
+		if (player.current.currentTime) player.current.currentTime = 0;
 	}
 
 	function addToQueue(track: Track) {
@@ -238,7 +237,7 @@ export function usePlaybackModel() {
 			}
 		}
 
-		return -1;
+		return queue.length;
 	}
 
 	function checkAndSetCurrentPlaybackObject(playbackObject: PlaybackObject) {
@@ -291,11 +290,11 @@ export function usePlaybackModel() {
 			setQueue([]);
 		}
 		
-		player.current!.pause();
+		player.current?.pause();
 
 		setShouldPlay(true);
 
-		checkAndSetCurrentPlaybackObject(
+		setCurrentPlaybackObject(
 			new PlaybackObject(
 				new Track(
 					"Loading...",
@@ -339,13 +338,17 @@ export function usePlaybackModel() {
 
 	function playTrack(track: Track, position?: number, guid?: string): Promise<PlaybackObject> {
 
+		console.log("playing this track")
+
 		return new Promise((resolve, reject) =>  {
 
 			if (currentPlaybackObject) {
+				console.log("had playback object")
 				if (currentPlaybackObject?.track?.id !== track.id) {
 					prepareForNewSong();
 				}
 			} else {
+				console.log("didn't have playback object")
 				prepareForNewSong();
 			}
 
@@ -355,7 +358,7 @@ export function usePlaybackModel() {
 					
 					if (currentPlaybackObject.track?.id === playbackObject.track?.id) {
 						setShouldPlay(false);
-						player.current!.currentTime = 0;
+						if (player.current.currentTime) player.current.currentTime = 0;
 					}
 					 //TODO check if this is what you acutally wnant
 

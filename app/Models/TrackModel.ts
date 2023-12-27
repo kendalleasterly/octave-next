@@ -9,7 +9,7 @@ export function useTrackModel() {
 	const setCurrentPlaybackObject = useSetRecoilState(currentPlaybackObjectAtom);
 	const account = useRecoilValue(accountAtom)
 
-	let serverURL = "https://open-music.herokuapp.com"
+	let serverURL = "https://kendalleasterly.com/api"
 	// const serverURL = "http://localhost:4000"
 
 
@@ -20,7 +20,7 @@ export function useTrackModel() {
 
 		return new Promise((resolve, reject) => {
 			// const serverURL = "http://localhost:4000"
-			const serverURL = "https://open-music.herokuapp.com";
+			const serverURL = "https://kendalleasterly.com/api";
 
 			const SSTrack = sessionStorage.getItem(track.id);
 

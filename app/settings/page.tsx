@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { headerTextAtom, isDarkAtom } from '../Global/atoms';
 import { accountAtom, useAccountModel } from '../Models/AccountModel';
-import { useReferences } from '../Global/references';
 
 function Settings() {
 
@@ -12,7 +11,6 @@ function Settings() {
 	const setHeaderText = useSetRecoilState(headerTextAtom)
 	const account = useRecoilValue(accountAtom)
 	const accountModel = useAccountModel()
-	const bodyRef: {current: HTMLBodyElement | null} = useReferences().bodyReference
 
 	useEffect(() => {
 		setHeaderText("Settings")
@@ -23,10 +21,6 @@ function Settings() {
 		console.log("running function")
 
         setIsDark(newIsDark)
-
-        // const bodyEl = bodyRef.current!
-        
-		// bodyEl.style.backgroundColor = newIsDark ? "#18181B" : "#FFFFFF"
        
 
         localStorage.setItem("isDark", newIsDark ? "true": "false")

@@ -44,7 +44,7 @@ export class Track {
         public id: string ,
         public artwork: string,
         public thumbnail: string,
-        public  duration: number,
+        public duration: number,
         public albumID: string,
         public artistObjects: SpotifyArtist[]) {}
 	

@@ -4,8 +4,8 @@ import {Track, SpotifyAlbum, SpotifyArtist, SpotifyObject, SpotifyTrack, FullSpo
 export function useSpotifyModel() {
 	const spotifyURL = "https://api.spotify.com/v1";
 
-	// const serverURL = "http://open-music.herokuapp.com";
-	const serverURL = "http://localhost:4000"
+	const serverURL = "https:/kendalleasterly.com/api";
+	// const serverURL = "http://localhost:4000"
 
 	function getToken():Promise<string> {
 		function requestToken():Promise<string> {

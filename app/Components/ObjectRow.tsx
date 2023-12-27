@@ -65,15 +65,15 @@ function ObjectRow({
 					{index + 1}
 				</p>
 
-				{noImage ? (
-					<p />
-				) : (
-					<Image
-						className="thumbnail rounded-md mr-4 md:mx-4"
+				{!noImage && 
+					<div className="thumbnail mr-4 md:mx-4 relative">
+						<Image
+						className="rounded-md"
 						src={object.thumbnail}
-						alt=""
-					/>
-				)}
+						fill={true}
+						alt="" />
+					</div>
+				}
 
 				<div className="text-left h-full space-y-0.5">
 					<p className={"one-line font-medium " + getTextColor()}>
