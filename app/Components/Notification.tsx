@@ -45,13 +45,13 @@ function Notification({ notificationObject }: {notificationObject: NotificationO
 
 		switch (notificationObject.iconType) {
 			case "collection success":
-				return CollectionSuccessIcon
+				return <CollectionSuccessIcon/>
 			case "collection error":
-				return CollectionErrorIcon
+				return <CollectionErrorIcon/>
 			case "error":
-				return ErrorIcon
+				return <ErrorIcon/>
 			case "success":
-				return SuccessIcon
+				return <SuccessIcon/>
 			default:
 				return ""
 		}
@@ -63,7 +63,7 @@ function Notification({ notificationObject }: {notificationObject: NotificationO
 			item && (
 				<animated.div style={styles}>
 					<div className="flex bg-tertiarybg px-6 py-2 rounded-lg space-x-4 mx-auto">
-						<Image src={getIcon()} alt="" />
+						{getIcon()}
 
 						<div>
 							<p className="text-sm text-white md:text-base one-line">{notificationObject.title}</p>

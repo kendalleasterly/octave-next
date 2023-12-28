@@ -1,19 +1,26 @@
-"use client"
+'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { headerTextAtom, isDarkAtom } from '../Global/atoms';
 import { accountAtom, useAccountModel } from '../Models/AccountModel';
 
 function Settings() {
 
+	console.log("rendering settings")
+
     const [isDark, setIsDark] = useRecoilState(isDarkAtom)
 	const setHeaderText = useSetRecoilState(headerTextAtom)
 	const account = useRecoilValue(accountAtom)
 	const accountModel = useAccountModel()
 
+	const [isClient, setIsClient] = useState(false)
+
 	useEffect(() => {
 		setHeaderText("Settings")
+
+		setIsClient(true)
+
 	})
 
 	function setNewIsDark(newIsDark:boolean) {
@@ -27,6 +34,7 @@ function Settings() {
     }
 
     return (
+		isClient ?
 			<div className = "flex flex-col">
 
 				<button onClick = {account.isSignedIn ? accountModel.signOut : accountModel.signIn} className = "text text-left">
@@ -38,6 +46,8 @@ function Settings() {
 				</button>
 
 			</div>
+			:
+			<p>Loading...</p>
 		);
 }
 

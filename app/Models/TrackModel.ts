@@ -9,7 +9,7 @@ export function useTrackModel() {
 	const setCurrentPlaybackObject = useSetRecoilState(currentPlaybackObjectAtom);
 	const account = useRecoilValue(accountAtom)
 
-	let serverURL = "https://kendalleasterly.com/api"
+	const serverURL: string = process.env.NEXT_PUBLIC_SERVER_URL!
 	// const serverURL = "http://localhost:4000"
 
 
@@ -20,7 +20,6 @@ export function useTrackModel() {
 
 		return new Promise((resolve, reject) => {
 			// const serverURL = "http://localhost:4000"
-			const serverURL = "https://kendalleasterly.com/api";
 
 			const SSTrack = sessionStorage.getItem(track.id);
 

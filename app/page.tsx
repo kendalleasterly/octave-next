@@ -1,10 +1,12 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { headerTextAtom } from './Global/atoms'
 
 function Home() {
+
+    console.log("rendering home")
 
     const setHeaderText = useRecoilState(headerTextAtom)[1]
 

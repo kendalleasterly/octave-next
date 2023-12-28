@@ -4,7 +4,8 @@ import {Track, SpotifyAlbum, SpotifyArtist, SpotifyObject, SpotifyTrack, FullSpo
 export function useSpotifyModel() {
 	const spotifyURL = "https://api.spotify.com/v1";
 
-	const serverURL = "https:/kendalleasterly.com/api";
+	const serverURL: string = process.env.NEXT_PUBLIC_SERVER_URL!
+
 	// const serverURL = "http://localhost:4000"
 
 	function getToken():Promise<string> {
@@ -15,6 +16,7 @@ export function useSpotifyModel() {
 				axios
 					.get(serverURL + "/spotify-token")
 					.then((response) => {
+						console.log(process.env.DEV_SERVER_URL)
 						localStorage.setItem("tokenJSON", JSON.stringify(response.data));
 
 						const token = response.data.token;

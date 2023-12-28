@@ -1,9 +1,12 @@
+// "use client"
+
 import { useRecoilValue } from "recoil"
 import { currentPlaybackObjectAtom } from "../Global/atoms"
 import { useTrackModel } from "../Models/TrackModel"
 import Image from "next/image"
 import { Album, Track } from "../Models/typedefs"
 import { ReactNode } from "react"
+import RemoteImage from "./RemoteImage"
 
 function ObjectRow({
 	object,
@@ -34,6 +37,8 @@ function ObjectRow({
 
 		return color
 	}
+
+	
 
 	function decideSongsInfo() {
 
@@ -66,13 +71,10 @@ function ObjectRow({
 				</p>
 
 				{!noImage && 
-					<div className="thumbnail mr-4 md:mx-4 relative">
-						<Image
-						className="rounded-md"
-						src={object.thumbnail}
-						fill={true}
-						alt="" />
-					</div>
+				<div className="thumbnail mr-4 md:mx-4 relative">
+					<RemoteImage src={object.thumbnail} className="rounded-md thumbnail"/>
+				</div>
+					
 				}
 
 				<div className="text-left h-full space-y-0.5">

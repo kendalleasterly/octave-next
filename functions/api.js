@@ -77,7 +77,6 @@ router.post("/id-download", (req, res) => {
 		.downloadVideo(id)
 		.then((songPath) => {
 
-			logger.log("downloaded video, trying to send file")
 			res.sendFile(songPath, (err) => {
 				if (err) {
 					logger.error("error downloading to response was:", err)

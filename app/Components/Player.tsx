@@ -21,6 +21,7 @@ import { usePlaceholder } from "./Placeholder"
 import Link from "next/link"
 import Image from "next/image"
 import { audioRefAtom } from "../Global/references"
+import RemoteImage from "./RemoteImage"
 
 function Player() {
 	const currentPlaybackObject = useRecoilValue(currentPlaybackObjectAtom)
@@ -146,13 +147,8 @@ function Player() {
 				>
 					{currentPlaybackObject.track &&
 					currentPlaybackObject.track.thumbnail != "" ? (
-						<div className="thumbnail mr-4 md:mx-4 relative">
-							<Image
-								className="rounded-md"
-								src={currentPlaybackObject.track.thumbnail}
-								fill={true}
-								alt=""
-							/>
+						<div className="w-12 h-12 md:w-14 md:h-14 relative">
+							<RemoteImage src={currentPlaybackObject.track.thumbnail} className="rounded-md"/>
 						</div>
 					) : (
 						placeholder.getPlaceholder()

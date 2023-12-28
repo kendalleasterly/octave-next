@@ -92,15 +92,9 @@ function downloadPicture(link) {
 function downloadVideo(id, didFail) {
 	return new Promise((resolve, reject) => {
 
-		logger.log("downloading video with", id, didFail)
-
 		const url = `http://www.youtube.com/watch?v=${id}`
 
-		logger.log("url", url)
-
 		const fileName = Date.now() + ".m4a"
-
-		logger.log("file name", fileName)
 
 		let stream
 
@@ -113,16 +107,12 @@ function downloadVideo(id, didFail) {
 			//ffmpeg convert you should try 251
 		} else {
 
-			logger.log("initialized stream")
-
 			stream = ytdl(url, { quality: 140 })
-
-			logger.log("created stream!")
 		}
 
 		if (!stream) {
 			reject("the stream could not be defined, so I'm going to restart")
-			heroku.restartDyno("the stream could not be defined, so I'm going to restart")
+			logger.error("the stream could not be defined, so I'm going to restart")
 			return
 		} 
 
@@ -149,39 +139,31 @@ function downloadVideo(id, didFail) {
 		// 	resolve(path.resolve(fileName))
 		// })
 
-		logger.log("about to pipe")
-
 		stream.pipe(
 			fs
 				.createWriteStream(fileName)
 				.on("error", () => {
-					logger.log("we got an error writing the stream")
+					logger.error("we got an error writing the stream")
 					if (didFail === true) {
-						logger.log("we've already failed so imma just reject")
+						logger.error("we've already failed so imma just reject")
 						reject(err)
 					} else {
 
-						logger.log("first time failing, trying again!")
+						logger.error("first time failing, trying again!")
 
 						downloadVideo(id, true)
 							.then((filePath) => {
-								logger.log("resolved the second time")
+
 								resolve(filePath)
 							})
 							.catch((err) => {
-								logger.log("error downloading video the second time:", err)
-								heroku.restartDyno("there was an error downloading " + id + " the second time: " + err)
+								logger.error("error downloading video the second time:", err)
 							})
 					}
 				})
 				.on("finish", () => {
-					// logger.log("finished, tyring to resolve with fileName", fileName)
 
 					//TODO: check if the file just is somewhere else
-
-					const resolved = path.resolve(fileName)
-
-					logger.log("resolved filePath:", resolved)
 
 					resolve(path.resolve(fileName))
 				})

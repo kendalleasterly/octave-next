@@ -1,3 +1,5 @@
+// "use client"
+
 import { usePathname, useRouter } from "next/navigation"
 
 import SearchIcon from "../Images/search.svg"

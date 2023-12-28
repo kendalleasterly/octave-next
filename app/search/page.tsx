@@ -12,6 +12,9 @@ import { headerTextAtom, searchTermAtom } from "../Global/atoms"
 import { Album, Track } from "../Models/typedefs"
 
 function Search() {
+
+	console.log("rendering search")
+
 	const [oldSearchTerm, setOldSearchTerm] = useState("")
 	const [searchResults, setSearchResults] = useState<(Track | Album)[]>([])
 	const [searchTerm, setSearchTerm] = useRecoilState(searchTermAtom)

@@ -62,8 +62,10 @@ export const contextSelectionAtom = atom({
 function getLSBool(setting: string) {
 
 
-    if (typeof window !== "undefined") {
+    if (typeof localStorage !== "undefined") {
         const LSBool = localStorage.getItem(setting)
+
+        console.log("got the value", LSBool)
 
         return LSBool === "true"
     } else {
