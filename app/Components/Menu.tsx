@@ -194,7 +194,7 @@ function Menu() {
 				onClick={() => {
 					setMenuIsActive(false);
 				}}>
-				<Link href={slug}>
+				<Link href={slug}> {/*this is a proper use of the link component and should not have any issues*/}
 					<div className="flex space-x-3">
 						<div className="my-auto">{children}</div>
 
