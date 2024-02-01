@@ -71,9 +71,9 @@ function ObjectRow({
 				</p>
 
 				{!noImage && 
-				<div className="thumbnail mr-4 md:mx-4 relative">
-					<RemoteImage src={object.thumbnail} className="rounded-md thumbnail"/>
-				</div>
+				
+				<RemoteImage src={object.thumbnail} className="thumbnail mr-4 md:mx-4 " imgClass="rounded-md thumbnail"/>
+				
 					
 				}
 

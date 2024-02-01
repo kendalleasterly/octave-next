@@ -95,10 +95,10 @@ export class FullAlbum extends Album {
         totalTracks: number,
         id: string,
         thumbnail: string,
-        date: string,
-        tracks: Track[],
-        artwork: string,
-        artistObjecs: SpotifyArtist[]) {
+        public date: string,
+        public tracks: Track[],
+        public artwork: string,
+        public artistObjecs: SpotifyArtist[]) {
             super(title, artist, totalTracks, id, thumbnail)
         }
 	

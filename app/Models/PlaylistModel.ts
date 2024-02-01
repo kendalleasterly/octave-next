@@ -28,7 +28,7 @@ export function usePlaylistModel() {
 	const trackModel = useTrackModel()
 	const spotifyModel = useSpotifyModel()
 
-	function getPlaylist(id: string) {
+	function getPlaylist(id: string): Promise<Playlist> {
 		return new Promise((resolve, reject) => {
 			getDoc(doc(db, "playlists", id))
 				.then((doc) => {
@@ -284,7 +284,7 @@ export function usePlaylistModel() {
 			})
 	}
 
-	function getNextTracks(playlist: Playlist) {
+	function getNextTracks(playlist: Playlist): Promise<Playlist> {
 		console.log({ playlist })
 
 		return new Promise((resolve, reject) => {

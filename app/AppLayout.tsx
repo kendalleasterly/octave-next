@@ -1,8 +1,6 @@
 "use client"
 
 import "./App.css"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import "./globals.css"
 
 import {
@@ -49,24 +47,24 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 	}, [pathname])
 
 	useEffect(() => {
-		// accountModel.checkForGoogleRedirect()
-		// accountModel.getAccount()
+		accountModel.checkForGoogleRedirect()
+		accountModel.getAccount()
 		console.log("in empty use effect")
 
         setIsCLient(true)
 
-        // if (bodyRef.current) {
-        //     console.log("changed className to", getClassName())
-        //     bodyRef.current.className = getClassName()
-        // } else {
-        //     console.log("didn't change className to", getClassName())
-        // }
+        if (bodyRef.current) {
+            console.log("changed className to", getClassName())
+            bodyRef.current.className = getClassName()
+        } else {
+            console.log("didn't change className to", getClassName())
+        }
 
 	}, [])
 
-	// useEffect(() => {
-	// 	console.log("changed", isDarkAtom.toJSON())
-	// }, [isDarkAtom])
+	useEffect(() => {
+		console.log("changed", isDarkAtom.toJSON())
+	}, [isDarkAtom])
 
 	return (
         isClient ?

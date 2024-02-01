@@ -147,9 +147,9 @@ function Player() {
 				>
 					{currentPlaybackObject.track &&
 					currentPlaybackObject.track.thumbnail != "" ? (
-						<div className="w-12 h-12 md:w-14 md:h-14 relative">
-							<RemoteImage src={currentPlaybackObject.track.thumbnail} className="rounded-md"/>
-						</div>
+						
+						<RemoteImage src={currentPlaybackObject.track.thumbnail} className="w-12 h-12 md:w-14 md:h-14 " imgClass="rounded-md"/>
+						
 					) : (
 						placeholder.getPlaceholder()
 					)}

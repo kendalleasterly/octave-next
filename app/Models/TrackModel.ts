@@ -119,7 +119,7 @@ export function useTrackModel() {
 		return tracksWithPositions
 	}
 
-	function playCollection(collection: {object: Track, position: number}[], isShuffled: boolean) {
+	function playCollection(collection: {object: Track, position: number}[], isShuffled: boolean): Promise<PlaybackObject[]> {
 		return new Promise((resolve, reject) => {
 
 			let playbackObjectArray: PlaybackObject[] = [];
