@@ -17,7 +17,7 @@ export function useTrackModel() {
 
 		const track = JSON.parse(JSON.stringify(rawTrack))
 		delete track.dateAdded
-		delete track.disc //we deprecated disc
+		delete track.disc // we deprecated disc
 
 		return new Promise((resolve, reject) => {
 			// const serverURL = "http://localhost:4000"

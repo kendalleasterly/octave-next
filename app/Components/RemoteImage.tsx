@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-export default function RemoteImage({className, imgClass, src}: {className: string, imgClass: string, src: string}) {
+export default function RemoteImage({imgClass, src, className}: {className: string, imgClass: string, src: string}) {
 	function imageLoader({width}:{width:number}) {
 		return src
 	}

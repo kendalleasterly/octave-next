@@ -5,7 +5,19 @@ import { NotificationObject, useNotificationModel } from "./NotificationModel"
 import { useSpotifyModel } from "./SpotifyModel"
 import { useTrackModel } from "../Models/TrackModel"
 import { PlaylistTrack, SimplePlaylist, Track } from "../Models/typedefs"
-import { Timestamp, addDoc, arrayRemove, arrayUnion, collection, deleteField, doc, getDoc, runTransaction, serverTimestamp, writeBatch } from "firebase/firestore"
+import {
+	Timestamp,
+	addDoc,
+	arrayRemove,
+	arrayUnion,
+	collection,
+	deleteField,
+	doc,
+	getDoc,
+	runTransaction,
+	serverTimestamp,
+	writeBatch,
+} from "firebase/firestore"
 
 export class Playlist {
 	constructor(
@@ -16,7 +28,7 @@ export class Playlist {
 		public lastUpdatedTime: Date,
 		public ownerName: string,
 		public ownerUID: string,
-		public trackIDs: {[key: string]:Date},
+		public trackIDs: { [key: string]: Date },
 		public title: string,
 		public id: string
 	) {}
@@ -29,43 +41,55 @@ export function usePlaylistModel() {
 	const spotifyModel = useSpotifyModel()
 
 	function getPlaylist(id: string): Promise<Playlist> {
+		console.log("getting playlists")
+
 		return new Promise((resolve, reject) => {
 			getDoc(doc(db, "playlists", id))
 				.then((doc) => {
-					const data = doc.data() as any
 
-					const createTime = data.createTime.toDate()
-					const lastUpdatedTime = data.lastUpdatedTime.toDate()
+					console.log("trying to get playlist", id)
 
-					let tracks: PlaylistTrack[] = []
+					if (doc.exists()) {
+						const data = doc.data() as any
 
-					Object.values(data.firstTwentySongs).map((value) => {
-						const track = value as PlaylistTrack //doesn't have dateAdded until the next statement
+						const createTime = data.createTime.toDate()
+						const lastUpdatedTime = data.lastUpdatedTime.toDate()
 
-						tracks.push({
-							...track,
-							dateAdded: data.trackIDs[track.id].toDate(),
+						let tracks: PlaylistTrack[] = []
+
+						Object.values(data.firstTwentySongs).map((value) => {
+							const track = value as PlaylistTrack //doesn't have dateAdded until the next statement
+
+							console.log("trying to look at", data.trackIDs[track.id])
+
+							tracks.push({
+								...track,
+								dateAdded: data.trackIDs[track.id].dateAdded.toDate(),
+							})
 						})
-					})
 
-					tracks.sort((a, b) => {
-						return a.dateAdded.getTime() - b.dateAdded.getTime()
-					})
+						tracks.sort((a, b) => {
+							return a.dateAdded.getTime() - b.dateAdded.getTime()
+						})
 
-					const playlist = new Playlist(
-						createTime,
-						data.description,
-						tracks,
-						data.isVisible,
-						lastUpdatedTime,
-						data.ownerName,
-						data.ownerUID,
-						data.trackIDs,
-						data.title,
-						doc.id
-					)
+						const playlist = new Playlist(
+							createTime,
+							data.description,
+							tracks,
+							data.isVisible,
+							lastUpdatedTime,
+							data.ownerName,
+							data.ownerUID,
+							data.trackIDs,
+							data.title,
+							doc.id
+						)
 
-					resolve(playlist)
+						resolve(playlist)
+					} else {
+						console.log("doc doesn't exist")
+						reject("Playlist Didn't exist")
+					}
 				})
 				.catch((error) => {
 					console.log(error)
@@ -94,7 +118,11 @@ export function usePlaylistModel() {
 		})
 	}
 
-	function createPlaylist(description: string, isVisible: boolean, title: string) {
+	function createPlaylist(
+		description: string,
+		isVisible: boolean,
+		title: string
+	) {
 		if (title === "") {
 			notificationModel.add(
 				new NotificationObject(
@@ -169,29 +197,25 @@ export function usePlaylistModel() {
 
 		const playlistRef = doc(db, "playlists", playlist.id)
 
-
-		
 		// use transaction because we need to updated based off firstTwentySongs
 		return runTransaction(db, (transaction) => {
-				
-				return transaction.get(playlistRef).then((playlistDoc) => {
-					const docData: any = playlistDoc.data()
+			return transaction.get(playlistRef).then((playlistDoc) => {
+				const docData: any = playlistDoc.data()
 
-					const timeStamp = serverTimestamp()
+				const timeStamp = serverTimestamp()
 
-					let updatedPlaylistData:any = {}
+				let updatedPlaylistData: any = {}
 
-					updatedPlaylistData["lastUpdatedTime"] = timeStamp
-					updatedPlaylistData["trackIDs." + track.id] = timeStamp
-					
+				updatedPlaylistData["lastUpdatedTime"] = timeStamp
+				updatedPlaylistData["trackIDs." + track.id] = timeStamp
 
-					if (Object.values(docData.firstTwentySongs).length < 20) {
-						updatedPlaylistData["firstTwentySongs"] = arrayUnion(track)
-					}
+				if (Object.values(docData.firstTwentySongs).length < 20) {
+					updatedPlaylistData["firstTwentySongs"] = arrayUnion(track)
+				}
 
-					transaction.update(playlistRef, updatedPlaylistData)
-				})
+				transaction.update(playlistRef, updatedPlaylistData)
 			})
+		})
 			.then(() => {
 				notificationModel.add(
 					new NotificationObject(
@@ -201,7 +225,7 @@ export function usePlaylistModel() {
 					)
 				)
 
-				trackModel.addTrackToDatabase(track).catch((error:any) => {
+				trackModel.addTrackToDatabase(track).catch((error: any) => {
 					if (error.response) {
 						if (error.response.status !== 409) {
 							console.log("error adding song file to database", error)
@@ -229,31 +253,30 @@ export function usePlaylistModel() {
 
 		const playlistRef = doc(db, "playlists", playlist.id)
 
-
 		return runTransaction(db, (transaction) => {
-				return transaction.get(playlistRef).then((playlistDoc) => {
-					const data:any = playlistDoc.data()
+			return transaction.get(playlistRef).then((playlistDoc) => {
+				const data: any = playlistDoc.data()
 
-					let isInFirstTwenty = false
+				let isInFirstTwenty = false
 
-					data.firstTwentySongs.map((firstTrack: any) => {
-						if (firstTrack.id === track.id) isInFirstTwenty = true
-					})
-
-					console.log({ isInFirstTwenty })
-
-					let updateData:any = {}
-
-					if (isInFirstTwenty) {
-						updateData["firstTwentySongs"] = arrayRemove(track)
-					}
-
-					updateData["trackIDs." + track.id] = deleteField()
-					updateData["lastUpdatedTime"] = serverTimestamp()
-
-					transaction.update(playlistRef, updateData)
+				data.firstTwentySongs.map((firstTrack: any) => {
+					if (firstTrack.id === track.id) isInFirstTwenty = true
 				})
+
+				console.log({ isInFirstTwenty })
+
+				let updateData: any = {}
+
+				if (isInFirstTwenty) {
+					updateData["firstTwentySongs"] = arrayRemove(track)
+				}
+
+				updateData["trackIDs." + track.id] = deleteField()
+				updateData["lastUpdatedTime"] = serverTimestamp()
+
+				transaction.update(playlistRef, updateData)
 			})
+		})
 			.then(() => {
 				new NotificationObject(
 					`${track.title} removed`,
@@ -290,14 +313,16 @@ export function usePlaylistModel() {
 		return new Promise((resolve, reject) => {
 			//get a list of the song ids that haven't been retrieved
 
-			let retrievedTrackIDs:string[] = playlist.tracks.map((track) => {
+			let retrievedTrackIDs: string[] = playlist.tracks.map((track) => {
 				return track.id
 			}) //TEST
 
 			let remainingTrackIDs: string[] = []
 
 			Object.keys(playlist.trackIDs).map((trackID) => {
-				if (!retrievedTrackIDs.includes(trackID)) {remainingTrackIDs.push(trackID)}
+				if (!retrievedTrackIDs.includes(trackID)) {
+					remainingTrackIDs.push(trackID)
+				}
 			})
 
 			remainingTrackIDs.sort((a, b) => {
