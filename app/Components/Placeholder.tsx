@@ -1,5 +1,5 @@
-import PlaceholderLight from "../Images/placeholder-light.svg"
-import PlaceholderDark from "../Images/placeholder-dark.svg"
+import PlaceholderLight from "@/public/Images/placeholder-light.svg"
+import PlaceholderDark from "@/public/Images/placeholder-dark.svg"
 import { useRecoilValue } from 'recoil'
 import { isDarkAtom } from "../Global/atoms"
 import { ReactComponentElement } from "react"

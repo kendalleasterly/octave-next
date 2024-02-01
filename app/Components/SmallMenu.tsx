@@ -3,7 +3,7 @@ import React from "react"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { headerTextAtom, isDarkAtom, menuIsActiveAtom } from "../Global/atoms"
 
-import MenuIcon from "../Images/menu.svg"
+import MenuIcon from "@/public/Images/menu.svg"
 import Menu from "./Menu"
 
 function SmallMenu() {

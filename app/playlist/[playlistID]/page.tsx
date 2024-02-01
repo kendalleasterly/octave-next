@@ -12,8 +12,8 @@ import { PlaybackObject, Track } from "@/app/Models/typedefs"
 import { usePlaybackModel } from "../../Models/PlaybackModel"
 import { useTrackModel } from "../../Models/TrackModel"
 import { usePlaylistModel, Playlist } from "../../Models/PlaylistModel"
-import PlaceholderLargeDark from "../Images/placeholder-large-dark.svg"
-import PlaceholderLargeLight from "../Images/placeholder-large-light.svg"
+import PlaceholderLargeDark from "@/public/Images/placeholder-large-dark.svg"
+import PlaceholderLargeLight from "@/public/Images/placeholder-large-light.svg"
 import { db } from "../../Global/firebase"
 import RemoteImage from "@/app/Components/RemoteImage"
 
@@ -458,6 +458,7 @@ function PlaylistView({params}:{params:{playlistID:string}}) {
 									src={song.artwork}
                                     key={key}
 									className={getRoundingFromKey(key)}
+                                    imgClass=""
 								/>
                                 
 								
@@ -467,7 +468,7 @@ function PlaylistView({params}:{params:{playlistID:string}}) {
 				)
 			} else {
 				return (
-					<img src={playlist.tracks[0].artwork} alt="" className="rounded-xl" />
+					<RemoteImage src={playlist.tracks[0].artwork} imgClass="rounded-xl" />
 				)
 			}
 		} else {

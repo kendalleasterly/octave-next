@@ -5,10 +5,10 @@ import { animated, useTransition } from "@react-spring/web"
 import { useRecoilState } from "recoil"
 import { NotificationObject, notificationsAtom } from "../Models/NotificationModel"
 
-import CollectionSuccessIcon from "../Images/collection-success.svg"
-import CollectionErrorIcon from "../Images/collection-error.svg"
-import ErrorIcon from "../Images/error.svg"
-import SuccessIcon from "../Images/success.svg"
+import CollectionSuccessIcon from "@/public/Images/collection-success.svg"
+import CollectionErrorIcon from "@/public/Images/collection-error.svg"
+import ErrorIcon from "@/public/Images/error.svg"
+import SuccessIcon from "@/public/Images/success.svg"
 import Image from "next/image"
 
 

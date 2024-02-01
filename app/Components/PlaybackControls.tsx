@@ -1,11 +1,11 @@
-import SkipIcon from "../Images/skip-forward.svg";
-import BackIcon from "../Images/skip-backward.svg";
-import RepeatIcon from "../Images/repeat.svg";
-import ShuffleLightIcon from "../Images/shuffle-light.svg";
-import ShuffleDarkIcon from "../Images/shuffle-dark.svg";
-import ShufflingIcon from "../Images/shuffling.svg";
-import PlayingIcon from "../Images/playing.svg";
-import PausedIcon from "../Images/paused.svg";
+import SkipIcon from "@/public/Images/skip-forward.svg";
+import BackIcon from "@/public/Images/skip-backward.svg";
+import RepeatIcon from "@/public/Images/repeat.svg";
+import ShuffleLightIcon from "@/public/Images/shuffle-light.svg";
+import ShuffleDarkIcon from "@/public/Images/shuffle-dark.svg";
+import ShufflingIcon from "@/public/Images/shuffling.svg";
+import PlayingIcon from "@/public/Images/playing.svg";
+import PausedIcon from "@/public/Images/paused.svg";
 
 import {usePlaybackModel} from "../Models/PlaybackModel";
 import {useRecoilState, useRecoilValue} from "recoil";

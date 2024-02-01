@@ -5,11 +5,11 @@ import {FastAverageColor} from "fast-average-color";
 
 import ProgressBar from "./ProgressBar";
 
-import CloseIcon from "../Images/close.svg";
-import LargePlaceholder from "../Images/placeholder-large.svg";
+import CloseIcon from "@/public/Images/close.svg";
+import LargePlaceholder from "@/public/Images/placeholder-large.svg";
 import PlaybackControls from "./PlaybackControls";
-import DevicesIcon from "../Images/devices.svg";
-import TimelineIcon from "../Images/timeline.svg";
+import DevicesIcon from "@/public/Images/devices.svg";
+import TimelineIcon from "@/public/Images/timeline.svg";
 
 function FullScreenPlayer({ toggle }:{toggle: () => void}) {
   const currentPlaybackObject = useRecoilValue(currentPlaybackObjectAtom);

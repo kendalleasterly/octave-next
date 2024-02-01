@@ -7,7 +7,7 @@ import {
 } from "../Global/atoms"
 
 import ObjectRow from "./ObjectRow"
-import More from "../Images/more.svg"
+import More from "@/public/Images/more.svg"
 
 import { usePlaylistModel } from "../Models/PlaylistModel"
 import { accountAtom, useAccountModel } from "../Models/AccountModel"

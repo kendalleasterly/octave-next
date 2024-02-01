@@ -1,6 +1,6 @@
 import { Album } from "../Models/typedefs"
 import ObjectRow from "./ObjectRow"
-import Disclosure from "../Images/disclosure.svg"
+import Disclosure from "@/public/Images/disclosure.svg"
 import { useRecoilValue } from "recoil"
 import { isDarkAtom } from "../Global/atoms"
 import { useRouter } from "next/navigation"

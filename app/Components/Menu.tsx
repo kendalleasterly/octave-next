@@ -2,16 +2,16 @@
 
 import { usePathname, useRouter } from "next/navigation"
 
-import SearchIcon from "../Images/search.svg"
-import HomeIcon from "../Images/home.svg"
-import Logo from "../Images/logo.svg"
-import SettingsIcon from "../Images/settings.svg"
-import ClockIcon from "../Images/clock.svg"
-import HeartIcon from "../Images/heart.svg"
-import AlbumIcon from "../Images/album.svg"
-import PlaylistIcon from "../Images/playlist.svg"
-import AddIcon from "../Images/add.svg" 
-import UserCircleIcon from "../Images/user-circle.svg"
+import SearchIcon from "@/public/Images/search.svg"
+import HomeIcon from "@/public/Images/home.svg"
+import Logo from "@/public/Images/logo.svg"
+import SettingsIcon from "@/public/Images/settings.svg"
+import ClockIcon from "@/public/Images/clock.svg"
+import HeartIcon from "@/public/Images/heart.svg"
+import AlbumIcon from "@/public/Images/album.svg"
+import PlaylistIcon from "@/public/Images/playlist.svg"
+import AddIcon from "@/public/Images/add.svg" 
+import UserCircleIcon from "@/public/Images/user-circle.svg"
 import { useRecoilValue, useSetRecoilState } from "recoil"
 import {
 	isDarkAtom,
