@@ -18,6 +18,11 @@
       }
     ]
   },
+  "redirects": [ {
+    "source": "/",
+    "destination": "/search",
+    "type": 302
+  } ],
   "functions": [
     {
       "source": "functions",

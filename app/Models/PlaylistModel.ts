@@ -60,8 +60,6 @@ export function usePlaylistModel() {
 						Object.values(data.firstTwentySongs).map((value) => {
 							const track = value as PlaylistTrack //doesn't have dateAdded until the next statement
 
-							console.log("trying to look at", data.trackIDs[track.id])
-
 							tracks.push({
 								...track,
 								dateAdded: data.trackIDs[track.id].dateAdded.toDate(),

@@ -457,14 +457,14 @@ function PlaylistView({ params }: { params: { playlistID: string } }) {
 		if (firstUniqueArtworks.length > 0) {
 			if (firstUniqueArtworks.length == 4) {
 				return (
-					<div className="grid grid-cols-2 gap-0">
+					<div className="grid grid-cols-2 gap-0 h-full">
 						{firstUniqueArtworks.map((artwork, key) => {
 							return (
 								<RemoteImage
 									src={artwork}
 									key={key}
-									className={getRoundingFromKey(key)}
-									imgClass=""
+									className=''
+									imgClass={getRoundingFromKey(key)}
 								/>
 							)
 						})}
@@ -476,7 +476,7 @@ function PlaylistView({ params }: { params: { playlistID: string } }) {
 					<RemoteImage
 						src={playlist!.tracks[0].artwork}
 						imgClass="rounded-xl"
-						className=""
+						className="h-full"
 					/>
 				)
 			}
