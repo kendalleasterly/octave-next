@@ -344,7 +344,7 @@ function PlaylistView({ params }: { params: { playlistID: string } }) {
 			<div id="playlist-view" className="space-y-10">
 				<div className="md:flex md:space-x-6 space-y-6 md:space-y-0 md:items-center">
 					<div className="w-full max-w-sm md:w-60 md:h-60 mx-auto md:mx-0 md:max-w-none">
-						<PlaylistArtwork />
+						<PlaylistArtwork playlist={playlist} isDark={isDark}/>
 					</div>
 					<div className="my-auto space-y-6">
 						<div className="space-y-3">
@@ -433,76 +433,76 @@ function PlaylistView({ params }: { params: { playlistID: string } }) {
 	} else {
 		return null
 	}
+}
 
-	function PlaylistArtwork() {
-		function getRoundingFromKey(key: number) {
-			switch (key) {
-				case 0:
-					return "rounded-tl-xl"
-				case 1:
-					return "rounded-tr-xl"
-				case 2:
-					return "rounded-bl-xl"
-				case 3:
-					return "rounded-br-xl"
-				default:
-					return ""
-			}
+export function PlaylistArtwork({playlist, isDark}:{playlist: Playlist, isDark: boolean}) {
+	function getRoundingFromKey(key: number) {
+		switch (key) {
+			case 0:
+				return "rounded-tl-xl"
+			case 1:
+				return "rounded-tr-xl"
+			case 2:
+				return "rounded-bl-xl"
+			case 3:
+				return "rounded-br-xl"
+			default:
+				return ""
 		}
+	}
 
-		const firstUniqueArtworks = getFirstUniqueArtworks()
+	const firstUniqueArtworks = getFirstUniqueArtworks()
 
-        console.log({firstUniqueArtworks})
+	console.log({firstUniqueArtworks})
 
-		if (firstUniqueArtworks.length > 0) {
-			if (firstUniqueArtworks.length == 4) {
-				return (
-					<div className="grid grid-cols-2 gap-0 h-full">
-						{firstUniqueArtworks.map((artwork, key) => {
-							return (
-								<RemoteImage
-									src={artwork}
-									key={key}
-									className=''
-									imgClass={getRoundingFromKey(key)}
-								/>
-							)
-						})}
-					</div>
-				)
-			} else {
-
-				return (
-					<RemoteImage
-						src={playlist!.tracks[0].artwork}
-						imgClass="rounded-xl"
-						className="h-full"
-					/>
-				)
-			}
+	if (firstUniqueArtworks.length > 0) {
+		if (firstUniqueArtworks.length == 4) {
+			return (
+				<div className="grid grid-cols-2 gap-0 h-full">
+					{firstUniqueArtworks.map((artwork, key) => {
+						return (
+							<RemoteImage
+								src={artwork}
+								key={key}
+								className=''
+								imgClass={getRoundingFromKey(key)}
+							/>
+						)
+					})}
+				</div>
+			)
 		} else {
-			return isDark ? (
-				<PlaceholderLargeLight className="rounded-xl" />
-			) : (
-				<PlaceholderLargeDark className="rounded-xl" />
-			) //TODO: Test
+
+			return (
+				<RemoteImage
+					src={playlist!.tracks[0].artwork}
+					imgClass="rounded-xl"
+					className="h-full"
+				/>
+			)
+		}
+	} else {
+		return isDark ? (
+			<PlaceholderLargeLight className="rounded-xl" />
+		) : (
+			<PlaceholderLargeDark className="rounded-xl" />
+		) //TODO: Test
+	}
+
+	function getFirstUniqueArtworks() {
+		let artworks: string[] = []
+
+		for (let track of playlist!.tracks) {
+			if (!artworks.includes(track.artwork)) {
+				artworks.push(track.artwork)
+			}
+
+			if (artworks.length == 4) {
+				return artworks
+			}
 		}
 
-		function getFirstUniqueArtworks() {
-			let artworks: string[] = []
-
-            for (let track of playlist!.tracks) {
-                if (!artworks.includes(track.artwork)) {
-					artworks.push(track.artwork)
-				}
-
-				if (artworks.length == 4) {
-					return artworks
-				}
-            }
-
-			return artworks
-		}
+		return artworks
 	}
 }
 

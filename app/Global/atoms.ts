@@ -59,17 +59,17 @@ export const contextSelectionAtom = atom({
 
 //MARK: Settings
 
-function getLSBool(setting: string) {
+function getLSBool(setting: string, defaultVal: boolean) {
 
 
     if (typeof localStorage !== "undefined") {
         const LSBool = localStorage.getItem(setting)
 
-        console.log("got the value", LSBool)
-
-        return LSBool === "true"
-    } else {
-        console.log("chose not to get the value")
+        if (LSBool === null) {
+            return defaultVal
+        } else {
+            return LSBool === "true"
+        }
     }
 
     return false
@@ -79,5 +79,5 @@ function getLSBool(setting: string) {
 
 export const isDarkAtom = atom({
     key: "isDark",
-    default: getLSBool("isDark")
+    default: getLSBool("isDark", true)
 })
