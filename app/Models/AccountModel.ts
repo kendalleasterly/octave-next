@@ -47,6 +47,9 @@ export function useAccountModel() {
 	}
 
     function getAccount() {
+
+        console.log("getting account")
+
         auth.onAuthStateChanged(user => {
             if (user) {
                 if (!account.isSignedIn) {
@@ -108,7 +111,10 @@ export function useAccountModel() {
         })
     }
 
-    function checkForGoogleRedirect() { //TEST
+    function checkForGoogleRedirect() {
+
+        console.log("CHECKING FOR GOOGLE REDIRECT")
+
         getRedirectResult(auth)
         .then(result => {
 

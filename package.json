@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/font": "^14.1.0",
     "@react-spring/web": "^9.7.3",
     "axios": "^1.6.2",
     "fast-average-color": "^9.4.0",

@@ -48,6 +48,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
 	useEffect(() => {
 		accountModel.checkForGoogleRedirect()
+	}, [])
+
+	useEffect(() => {
+		
 		accountModel.getAccount()
 		console.log("in empty use effect")
 
@@ -60,7 +64,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             console.log("didn't change className to", getClassName())
         }
 
-	}, [])
+	}, [accountModel])
 
 	useEffect(() => {
 		console.log("changed", isDarkAtom.toJSON())

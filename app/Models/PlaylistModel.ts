@@ -205,7 +205,7 @@ export function usePlaylistModel() {
 				let updatedPlaylistData: any = {}
 
 				updatedPlaylistData["lastUpdatedTime"] = timeStamp
-				updatedPlaylistData["trackIDs." + track.id] = timeStamp
+				updatedPlaylistData["trackIDs." + track.id] = {dateAdded: timeStamp, id: track.id}
 
 				if (Object.values(docData.firstTwentySongs).length < 20) {
 					updatedPlaylistData["firstTwentySongs"] = arrayUnion(track)
