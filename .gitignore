@@ -38,3 +38,4 @@ next-env.d.ts
 
 .firebase
 /app/Global/firebase.ts
+.passwords.txt
