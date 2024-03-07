@@ -13,7 +13,7 @@ function getRefreshToken() {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
 				Authorization:
-					"Basic ***REMOVED***",
+					"Basic " + process.env.SPOTIFY_TOKEN,
 			},
 		}
 
