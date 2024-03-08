@@ -66,7 +66,7 @@ function Menu() {
 	// function testFunction() {
 	// 	axios.get("https://api.spotify.com/v1/playlists/56RLbe1qdSnWwA7nmzcFSX/tracks?offset=200&limit=100", {
 	// 		headers: {
-	// 			Authorization: "Bearer ***REMOVED***"
+	// 			Authorization: "Bearer ***Removed***"
 	// 		}
 	// 	})
 	// 	.then(response => {
